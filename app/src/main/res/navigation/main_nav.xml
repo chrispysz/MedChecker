@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_nav"
+    app:startDestination="@id/debunkList">
+
+    <fragment
+        android:id="@+id/debunkList"
+        android:name="com.example.cachingapp.ui.DebunkList"
+        android:label="Debunks"
+        tools:layout="@layout/fragment_debunk_list" >
+        <action
+            android:id="@+id/action_debunkList_to_debunkDetails"
+            app:destination="@id/debunkDetails" />
+        <action
+            android:id="@+id/action_debunkList_to_camera"
+            app:destination="@id/camera" />
+        <action
+            android:id="@+id/action_debunkList_to_favourites"
+            app:destination="@id/favourites" />
+    </fragment>
+    <fragment
+        android:id="@+id/debunkDetails"
+        android:name="com.example.cachingapp.ui.DebunkDetails"
+        android:label="Details"
+        tools:layout="@layout/fragment_debunk_details" >
+        <action
+            android:id="@+id/action_debunkDetails_to_debunkList"
+            app:destination="@id/debunkList" />
+        <argument
+            android:name="selectedDebunk"
+            app:argType="com.example.cachingapp.data.Debunk" />
+    </fragment>
+    <fragment
+        android:id="@+id/camera"
+        android:name="com.example.cachingapp.ui.CameraFragment"
+        android:label="fragment_camera"
+        tools:layout="@layout/fragment_camera" >
+        <action
+            android:id="@+id/action_camera_to_debunkList"
+            app:destination="@id/debunkList" />
+    </fragment>
+    <fragment
+        android:id="@+id/favourites"
+        android:name="com.example.cachingapp.ui.FavouritesFragment"
+        android:label="Favourites"
+        tools:layout="@layout/fragment_favourites" >
+        <action
+            android:id="@+id/action_favourites_to_debunkList"
+            app:destination="@id/debunkList" />
+    </fragment>
+</navigation>
