@@ -9,6 +9,8 @@ import android.view.animation.AnimationUtils
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cachingapp.R
 import com.example.cachingapp.databinding.FragmentDebunkListBinding
@@ -23,6 +25,7 @@ class DebunkList : Fragment(R.layout.fragment_debunk_list) {
     private val binding get() = _binding!!
     private lateinit var debunkAdapter: DebunkAdapter
 
+    val args: DebunkListArgs by navArgs()
 
     private val viewModel: DebunkViewModel by viewModels()
 
@@ -75,6 +78,10 @@ class DebunkList : Fragment(R.layout.fragment_debunk_list) {
             onExpandButtonClicked(binding)
         }
 
+        binding.photoFab.setOnClickListener {
+            onCameraButtonClicked(binding)
+        }
+
 
         binding.apply {
             recyclerView.apply {
@@ -92,6 +99,11 @@ class DebunkList : Fragment(R.layout.fragment_debunk_list) {
             }
         }
 
+    }
+
+    private fun onCameraButtonClicked(binding: FragmentDebunkListBinding) {
+        val action=DebunkListDirections.actionDebunkListToCamera()
+        binding.photoFab.findNavController().navigate(action)
     }
 
 
@@ -140,5 +152,12 @@ class DebunkList : Fragment(R.layout.fragment_debunk_list) {
         }
     }
 
+
+    override fun onResume() {
+        super.onResume()
+        if (args.from=="camera"){
+            debunkAdapter.submitList(args.filteredDebunks?.toMutableList())
+        }
+    }
 
 }

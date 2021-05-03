@@ -19,6 +19,14 @@
         <action
             android:id="@+id/action_debunkList_to_favourites"
             app:destination="@id/favourites" />
+        <argument
+            android:name="filteredDebunks"
+            app:argType="com.example.cachingapp.data.Debunk[]"
+            app:nullable="true"
+            android:defaultValue="@null" />
+        <argument
+            android:name="from"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/debunkDetails"

@@ -12,6 +12,9 @@ interface DebunkDao {
     @Query("SELECT * FROM debunks")
     fun getAllDebunks(): Flow<List<Debunk>>
 
+    @Query("SELECT * FROM debunks WHERE category=(:cat)")
+    fun getCategoryDebunks(cat: String): List<Debunk>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertDebunk(debunks: List<Debunk>)
 
