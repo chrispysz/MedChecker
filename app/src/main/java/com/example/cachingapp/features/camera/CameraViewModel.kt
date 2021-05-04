@@ -23,18 +23,18 @@ class CameraViewModel @Inject constructor(private val repository: DebunkReposito
     private lateinit var text: String
 
 
-    suspend fun textRecognition(photo: Bitmap): List<Debunk> {
+    fun textRecognition(photo: Bitmap): String {
 
         val image = InputImage.fromBitmap(photo, 0)
 
         val recognizer = TextRecognition.getClient()
-        var relevantDebunks= emptyList<Debunk>()
+        var filter= ""
 
         recognizer.process(image)
             .addOnSuccessListener { visionText ->
                 // Task completed successfully
                 text = visionText.text
-                GlobalScope.launch { relevantDebunks = fetchBiggestCategoryData(getOrderedOccurrences()) }
+                filter = fetchBiggestCategoryData(getOrderedOccurrences())
 
 
                 val builder = StringBuilder()
@@ -51,11 +51,11 @@ class CameraViewModel @Inject constructor(private val repository: DebunkReposito
                 Log.i("clip", "Task failed")
             }
 
-        return relevantDebunks
+        return filter
     }
 
-    private suspend fun fetchBiggestCategoryData(l: ArrayList<String>): List<Debunk> {
-        return repository.getCategoryDebunks(l[0])
+    private fun fetchBiggestCategoryData(l: ArrayList<String>): String {
+        return l[0]
     }
 
     private fun getOrderedOccurrences(): ArrayList<String> {

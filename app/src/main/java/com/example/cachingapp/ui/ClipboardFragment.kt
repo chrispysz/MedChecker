@@ -53,8 +53,8 @@ class ClipboardFragment : Fragment(R.layout.fragment_clipboard) {
         val text = item?.text.toString()
         val filter = viewModel.analyzeFromClipboard(text)
         val action = ClipboardFragmentDirections.actionClipboardFragmentToDebunkList(
-            filter,
-            "clipboard"
+            "clipboard",
+            filter
         )
         findNavController().navigate(action)
     }

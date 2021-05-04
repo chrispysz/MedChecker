@@ -4,6 +4,7 @@ import androidx.room.withTransaction
 import com.example.cachingapp.api.DebunkApi
 import com.example.cachingapp.util.networkBoundResource
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class DebunkRepository @Inject constructor(
@@ -27,6 +28,10 @@ class DebunkRepository @Inject constructor(
             }
         }
     )
+
+    fun searchDebunks(searchQuery: String): Flow<List<Debunk>>{
+        return debunkDao.searchDebunks(searchQuery)
+    }
 
 
 }

@@ -2,6 +2,8 @@ package com.example.cachingapp.features.debunks
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Filter
+import android.widget.Filterable
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -67,5 +69,7 @@ class DebunkAdapter : ListAdapter<Debunk, DebunkAdapter.DebunkViewHolder>(Debunk
     fun setData(debunk: List<Debunk>) {
         this.debunkList=debunk
     }
+
+
 
 }

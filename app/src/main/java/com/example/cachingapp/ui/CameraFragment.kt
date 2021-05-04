@@ -1,6 +1,7 @@
 package com.example.cachingapp.ui
 
 import android.app.Activity
+import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
@@ -41,28 +42,29 @@ class CameraFragment : Fragment(R.layout.fragment_camera) {
         _binding = null
     }
 
+    val REQUEST_IMAGE_CAPTURE = 1
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        startActivityForResult(intent, 1)
+        startActivityForResult(intent, REQUEST_IMAGE_CAPTURE)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
 
-        var debunks=emptyList<Debunk>()
+        var filter = ""
 
-        if (requestCode == 1) {
-            if (resultCode == Activity.RESULT_OK) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE) {
+            if (resultCode == RESULT_OK) {
                 val photo = data?.extras?.get("data") as Bitmap
 
-                runBlocking {
-                    val job=launch { debunks=viewModel.textRecognition(photo) }
-                    job.join()
-                    val action=CameraFragmentDirections.actionCameraToDebunkList(debunks.toTypedArray(), "camera")
-                    findNavController().navigate(action)}
-
+                filter = viewModel.textRecognition(photo)
+                val action = CameraFragmentDirections.actionCameraToDebunkList(
+                    "camera",
+                    filter
+                )
+                findNavController().navigate(action)
             }
+
         }
     }
 

@@ -17,4 +17,7 @@ interface DebunkDao {
 
     @Query("DELETE FROM debunks")
     suspend fun deleteAllDebunks()
+
+    @Query("SELECT * FROM debunks WHERE category LIKE :searchQuery OR question LIKE :searchQuery OR answer like :searchQuery")
+    fun searchDebunks(searchQuery: String): Flow<List<Debunk>>
 }

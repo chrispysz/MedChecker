@@ -1,15 +1,17 @@
 package com.example.cachingapp.ui
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.NavController
+import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cachingapp.R
@@ -24,6 +26,7 @@ class DebunkList : Fragment(R.layout.fragment_debunk_list) {
     private var _binding: FragmentDebunkListBinding? = null
     private val binding get() = _binding!!
     private lateinit var debunkAdapter: DebunkAdapter
+    lateinit var searchView: SearchView
 
     val args: DebunkListArgs by navArgs()
 
@@ -62,6 +65,7 @@ class DebunkList : Fragment(R.layout.fragment_debunk_list) {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentDebunkListBinding.inflate(inflater, container, false)
+        setHasOptionsMenu(true)
         return binding.root
     }
 
@@ -72,7 +76,6 @@ class DebunkList : Fragment(R.layout.fragment_debunk_list) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         debunkAdapter = DebunkAdapter()
-
 
         binding.expandFab.setOnClickListener {
             onExpandButtonClicked(binding)
@@ -106,12 +109,14 @@ class DebunkList : Fragment(R.layout.fragment_debunk_list) {
     }
 
     private fun onClipboardButtonClicked(binding: FragmentDebunkListBinding) {
-        val action=DebunkListDirections.actionDebunkListToClipboardFragment()
+        val action = DebunkListDirections.actionDebunkListToClipboardFragment()
         binding.photoFab.findNavController().navigate(action)
+
+
     }
 
     private fun onCameraButtonClicked(binding: FragmentDebunkListBinding) {
-        val action=DebunkListDirections.actionDebunkListToCamera()
+        val action = DebunkListDirections.actionDebunkListToCamera()
         binding.photoFab.findNavController().navigate(action)
     }
 
@@ -162,11 +167,48 @@ class DebunkList : Fragment(R.layout.fragment_debunk_list) {
     }
 
 
-    override fun onResume() {
-        super.onResume()
-        if (args.from=="camera" || args.from=="clipboard"){
-            val filter=args.filterCategory
-        }
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.main_menu, menu)
+        val item = menu.findItem(R.id.action_search)
+        searchView = item.actionView as SearchView
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                if (query != null) {
+                    searchDebunks(query)
+                }
+                return true
+            }
+
+            override fun onQueryTextChange(query: String?): Boolean {
+                if (query != null) {
+                    searchDebunks(query)
+                }
+                return true
+            }
+
+        })
     }
+
+    private fun searchDebunks(query: String) {
+        val searchQuery = "%$query%"
+        viewModel.searchDebunks(searchQuery).observe(viewLifecycleOwner, { list ->
+            list.let {
+                debunkAdapter.submitList(it)
+                debunkAdapter.setData(it)
+            }
+        })
+    }
+
+    private fun setQueryText(text: String){
+            if (args.from=="clipboard" || args.from=="camera")
+                searchView.setQuery(text, false)
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        args.filterCategory?.let { setQueryText(it) }
+        super.onPrepareOptionsMenu(menu)
+    }
+
+
 
 }

@@ -13,4 +13,4 @@ data class Debunk(
     val question: String,
     val answer: String,
     val sources: String
-) : Parcelable
+): Parcelable
