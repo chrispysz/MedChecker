@@ -1,4 +1,4 @@
-package com.example.cachingapp.features.camera
+package com.example.cachingapp.features.clipboard
 
 import android.graphics.Bitmap
 import android.util.Log
@@ -9,53 +9,42 @@ import com.example.cachingapp.util.Resource
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.launch
 import java.lang.StringBuilder
 import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
 
 @HiltViewModel
-class CameraViewModel @Inject constructor(private val repository: DebunkRepository) : ViewModel() {
+class ClipboardViewModel @Inject constructor(private val repository: DebunkRepository) : ViewModel() {
 
     private lateinit var text: String
 
 
-    suspend fun textRecognition(photo: Bitmap): List<Debunk> {
+    fun analyzeFromClipboard(text: String): String {
 
-        val image = InputImage.fromBitmap(photo, 0)
+        var filter=""
 
-        val recognizer = TextRecognition.getClient()
-        var relevantDebunks= emptyList<Debunk>()
+        this.text=text
+        if (this.text == "") {
+            Log.i("clip","Clipboard is empty! Copy something first")
+        } else {
 
-        recognizer.process(image)
-            .addOnSuccessListener { visionText ->
-                // Task completed successfully
-                text = visionText.text
-                GlobalScope.launch { relevantDebunks = fetchBiggestCategoryData(getOrderedOccurrences()) }
+            filter=fetchBiggestCategoryData(getOrderedOccurrences())
 
-
-                val builder = StringBuilder()
-                for (i in 1 until getOrderedOccurrences().size) {
-                    builder.append(getOrderedOccurrences()[i]).append(" ")
-                }
-                Log.i(
-                    "clip", "Your text is mostly about: ${getOrderedOccurrences()[0]}\n" +
-                            "Other categories found: $builder"
-                )
+            val builder = StringBuilder()
+            for (i in 1 until getOrderedOccurrences().size) {
+                builder.append(getOrderedOccurrences()[i]).append(" ")
             }
-            .addOnFailureListener {
-                // Task failed with an exception
-                Log.i("clip", "Task failed")
-            }
+            Log.i("clip","Your text is mostly about: ${getOrderedOccurrences()[0]}\n" +
+                    "Other categories found: $builder")
+        }
 
-        return relevantDebunks
+        return filter
     }
 
-    private suspend fun fetchBiggestCategoryData(l: ArrayList<String>): List<Debunk> {
-        return repository.getCategoryDebunks(l[0])
+    private  fun fetchBiggestCategoryData(l: ArrayList<String>): String {
+        return l[0]
     }
 
     private fun getOrderedOccurrences(): ArrayList<String> {

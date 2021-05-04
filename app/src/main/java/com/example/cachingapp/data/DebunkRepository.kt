@@ -28,8 +28,5 @@ class DebunkRepository @Inject constructor(
         }
     )
 
-    fun getCategoryDebunks(cat: String) =
-        debunkDao.getCategoryDebunks(cat)
-
 
 }

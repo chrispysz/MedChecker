@@ -82,6 +82,10 @@ class DebunkList : Fragment(R.layout.fragment_debunk_list) {
             onCameraButtonClicked(binding)
         }
 
+        binding.clipboardFab.setOnClickListener {
+            onClipboardButtonClicked(binding)
+        }
+
 
         binding.apply {
             recyclerView.apply {
@@ -99,6 +103,11 @@ class DebunkList : Fragment(R.layout.fragment_debunk_list) {
             }
         }
 
+    }
+
+    private fun onClipboardButtonClicked(binding: FragmentDebunkListBinding) {
+        val action=DebunkListDirections.actionDebunkListToClipboardFragment()
+        binding.photoFab.findNavController().navigate(action)
     }
 
     private fun onCameraButtonClicked(binding: FragmentDebunkListBinding) {
@@ -155,8 +164,8 @@ class DebunkList : Fragment(R.layout.fragment_debunk_list) {
 
     override fun onResume() {
         super.onResume()
-        if (args.from=="camera"){
-            debunkAdapter.submitList(args.filteredDebunks?.toMutableList())
+        if (args.from=="camera" || args.from=="clipboard"){
+            val filter=args.filterCategory
         }
     }
 
