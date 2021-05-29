@@ -201,7 +201,7 @@ class DebunkList : Fragment(R.layout.fragment_debunk_list) {
 
     private fun setQueryText(text: String){
             if (args.from=="clipboard" || args.from=="camera")
-                searchView.setQuery(text, false)
+                searchView.setQuery(text, true)
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {

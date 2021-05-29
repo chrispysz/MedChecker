@@ -61,7 +61,7 @@ class ClipboardViewModel @Inject constructor(private val repository: DebunkRepos
         }
 
         val list =
-            mutableListOf(covidCnt to "covid", vaccineCnt to "vaccines").takeWhile { it.first > 0 }
+            mutableListOf(covidCnt to "covid", vaccineCnt to "vaccine")
         val listSorted = list.sortedByDescending { it.first }
         val orderedCategoriesList = ArrayList<String>()
 

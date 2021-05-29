@@ -34,6 +34,7 @@ class DebunkAdapter : ListAdapter<Debunk, DebunkAdapter.DebunkViewHolder>(Debunk
                 imageViewLogo.setImageResource(
                     when (debunk.category) {
                         "covid" -> R.drawable.covid_category
+                        "vaccines" -> R.drawable.vaccine_category
                         else -> R.drawable.no_connection
                     }
                 )
