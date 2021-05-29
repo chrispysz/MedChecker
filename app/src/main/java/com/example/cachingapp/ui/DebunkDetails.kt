@@ -42,6 +42,7 @@ class DebunkDetails : Fragment(R.layout.fragment_debunk_details) {
         image_view_logo_details.setImageResource(
             when (debunk.category) {
                 "covid" -> R.drawable.covid_category
+                "vaccines" -> R.drawable.vaccine_category
                 else -> R.drawable.no_connection
             }
         )
