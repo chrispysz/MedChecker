@@ -59,11 +59,11 @@ class DebunkAdapter : ListAdapter<Debunk, DebunkAdapter.DebunkViewHolder>(Debunk
 
     class DebunkComparator : DiffUtil.ItemCallback<Debunk>() {
         override fun areItemsTheSame(oldItem: Debunk, newItem: Debunk) =
-            oldItem.question == newItem.question
+            oldItem == newItem
 
 
         override fun areContentsTheSame(oldItem: Debunk, newItem: Debunk) =
-            oldItem == newItem
+            oldItem.question == newItem.question && oldItem.answer == newItem.answer
 
     }
 

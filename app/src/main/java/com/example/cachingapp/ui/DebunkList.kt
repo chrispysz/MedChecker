@@ -4,10 +4,12 @@ import android.os.Bundle
 import android.view.*
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
@@ -15,11 +17,16 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cachingapp.R
+import com.example.cachingapp.data.DebunkRepository
 import com.example.cachingapp.databinding.FragmentDebunkListBinding
 import com.example.cachingapp.features.debunks.DebunkAdapter
 import com.example.cachingapp.features.debunks.DebunkViewModel
-import com.example.cachingapp.util.Resource
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class DebunkList : Fragment(R.layout.fragment_debunk_list) {
@@ -27,6 +34,9 @@ class DebunkList : Fragment(R.layout.fragment_debunk_list) {
     private val binding get() = _binding!!
     private lateinit var debunkAdapter: DebunkAdapter
     lateinit var searchView: SearchView
+
+    @Inject
+    lateinit var repository: DebunkRepository
 
     val args: DebunkListArgs by navArgs()
 
@@ -89,6 +99,10 @@ class DebunkList : Fragment(R.layout.fragment_debunk_list) {
             onClipboardButtonClicked(binding)
         }
 
+        binding.syncFab.setOnClickListener {
+            onSyncButtonClicked()
+        }
+
 
         binding.apply {
             recyclerView.apply {
@@ -97,12 +111,24 @@ class DebunkList : Fragment(R.layout.fragment_debunk_list) {
             }
 
             viewModel.debunks.observe(viewLifecycleOwner) { result ->
-                debunkAdapter.submitList(result.data)
-                result.data?.let { debunkAdapter.setData(it) }
+                debunkAdapter.submitList(result)
+                result.let { debunkAdapter.setData(it) }
 
-                progressBar.isVisible = result is Resource.Loading && result.data.isNullOrEmpty()
-                textViewError.isVisible = result is Resource.Error && result.data.isNullOrEmpty()
-                textViewError.text = result.error?.localizedMessage
+            }
+        }
+
+    }
+
+    private fun onSyncButtonClicked() {
+        GlobalScope.launch(Dispatchers.IO) {
+            try {
+                repository.getApiDebunks()
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(context, "Error occurred while syncing data.\nCheck your internet connection!", Toast.LENGTH_LONG)
+                        .show()
+                }
+
             }
         }
 
@@ -199,16 +225,15 @@ class DebunkList : Fragment(R.layout.fragment_debunk_list) {
         })
     }
 
-    private fun setQueryText(text: String){
-            if (args.from=="clipboard" || args.from=="camera")
-                searchView.setQuery(text, true)
+    private fun setQueryText(text: String) {
+        if (args.from == "clipboard" || args.from == "camera")
+            searchView.setQuery(text, true)
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
         args.filterCategory?.let { setQueryText(it) }
         super.onPrepareOptionsMenu(menu)
     }
-
 
 
 }

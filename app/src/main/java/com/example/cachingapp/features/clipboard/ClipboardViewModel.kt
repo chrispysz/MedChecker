@@ -1,16 +1,9 @@
 package com.example.cachingapp.features.clipboard
 
-import android.graphics.Bitmap
 import android.util.Log
 import androidx.lifecycle.ViewModel
-import com.example.cachingapp.data.Debunk
 import com.example.cachingapp.data.DebunkRepository
-import com.example.cachingapp.util.Resource
-import com.google.mlkit.vision.common.InputImage
-import com.google.mlkit.vision.text.TextRecognition
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
-import java.lang.StringBuilder
 import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
