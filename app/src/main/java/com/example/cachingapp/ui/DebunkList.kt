@@ -103,6 +103,10 @@ class DebunkList : Fragment(R.layout.fragment_debunk_list) {
             onSyncButtonClicked()
         }
 
+        binding.addFab.setOnClickListener {
+            onNewDebunkButtonClicked(binding)
+        }
+
 
         binding.apply {
             recyclerView.apply {
@@ -123,6 +127,10 @@ class DebunkList : Fragment(R.layout.fragment_debunk_list) {
         GlobalScope.launch(Dispatchers.IO) {
             try {
                 repository.getApiDebunks()
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(context, "Debunks have been successfully reset!", Toast.LENGTH_LONG)
+                        .show()
+                }
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
                     Toast.makeText(context, "Error occurred while syncing data.\nCheck your internet connection!", Toast.LENGTH_LONG)
@@ -134,9 +142,16 @@ class DebunkList : Fragment(R.layout.fragment_debunk_list) {
 
     }
 
+    private fun onNewDebunkButtonClicked(binding: FragmentDebunkListBinding) {
+        val action = DebunkListDirections.actionDebunkListToFavourites()
+        binding.addFab.findNavController().navigate(action)
+
+
+    }
+
     private fun onClipboardButtonClicked(binding: FragmentDebunkListBinding) {
         val action = DebunkListDirections.actionDebunkListToClipboardFragment()
-        binding.photoFab.findNavController().navigate(action)
+        binding.clipboardFab.findNavController().navigate(action)
 
 
     }
@@ -159,10 +174,12 @@ class DebunkList : Fragment(R.layout.fragment_debunk_list) {
             binding.clipboardFab.isClickable = true
             binding.photoFab.isClickable = true
             binding.syncFab.isClickable = true
+            binding.addFab.isClickable = true
         } else {
             binding.clipboardFab.isClickable = false
             binding.photoFab.isClickable = false
             binding.syncFab.isClickable = false
+            binding.addFab.isClickable = false
         }
     }
 
@@ -171,11 +188,13 @@ class DebunkList : Fragment(R.layout.fragment_debunk_list) {
             binding.clipboardFab.startAnimation(fromBottomUp)
             binding.photoFab.startAnimation(fromBottomUp)
             binding.syncFab.startAnimation(fromBottomUp)
+            binding.addFab.startAnimation(fromBottomUp)
             binding.expandFab.startAnimation(rotateOpen)
         } else {
             binding.clipboardFab.startAnimation(toBottomDown)
             binding.photoFab.startAnimation(toBottomDown)
             binding.syncFab.startAnimation(toBottomDown)
+            binding.addFab.startAnimation(toBottomDown)
             binding.expandFab.startAnimation(rotateClose)
         }
     }
@@ -185,10 +204,12 @@ class DebunkList : Fragment(R.layout.fragment_debunk_list) {
             binding.clipboardFab.visibility = View.VISIBLE
             binding.photoFab.visibility = View.VISIBLE
             binding.syncFab.visibility = View.VISIBLE
+            binding.addFab.visibility = View.VISIBLE
         } else {
             binding.clipboardFab.visibility = View.INVISIBLE
             binding.photoFab.visibility = View.INVISIBLE
             binding.syncFab.visibility = View.INVISIBLE
+            binding.addFab.visibility = View.INVISIBLE
         }
     }
 

@@ -92,4 +92,19 @@
         app:srcCompat="@drawable/sync_icon"
         android:contentDescription="TODO" />
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/add_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="24dp"
+        android:layout_above="@+id/sync_fab"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="invisible"
+        android:tint="@android:color/white"
+        app:srcCompat="@drawable/ic_baseline_new_24"
+        android:contentDescription="TODO" />
+
 </RelativeLayout>

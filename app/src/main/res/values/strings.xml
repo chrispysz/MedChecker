@@ -2,4 +2,10 @@
     <string name="app_name">MedChecker</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string-array name="add_spinner">
+        <item>vaccines</item>
+        <item>covid</item>
+        <item>general</item>
+    </string-array>
+
 </resources>

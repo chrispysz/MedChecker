@@ -8,9 +8,10 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 @Entity(tableName = "debunks")
 data class Debunk(
-    @PrimaryKey val id: Int,
-    val category: String,
-    val question: String,
-    val answer: String,
-    val sources: String
-): Parcelable
+    @PrimaryKey(autoGenerate = true)
+    val id: Long = 0,
+    var category: String,
+    var question: String,
+    var answer: String,
+    var sources: String
+) : Parcelable

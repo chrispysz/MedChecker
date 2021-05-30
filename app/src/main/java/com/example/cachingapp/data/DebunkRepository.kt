@@ -15,13 +15,15 @@ class DebunkRepository @Inject constructor(
     fun getDbDebunks() =
             debunkDao.getAllDebunks()
 
-
+    suspend fun insertDebunk(d: Debunk){
+        debunkDao.insertDebunk(listOf(d))
+    }
 
 
 
     suspend fun getApiDebunks() = run {
         val debunks = api.getDebunks()
-        delay(1500)
+        delay(500)
         db.withTransaction {
             debunkDao.deleteAllDebunks()
             debunkDao.insertDebunk(debunks)
