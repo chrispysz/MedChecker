@@ -39,6 +39,7 @@ class CameraViewModel @Inject constructor(private val repository: DebunkReposito
                     "clip", "Your text is mostly about: ${getOrderedOccurrences()[0]}\n" +
                             "Other categories found: $builder"
                 )
+
             }
             .addOnFailureListener {
                 // Task failed with an exception

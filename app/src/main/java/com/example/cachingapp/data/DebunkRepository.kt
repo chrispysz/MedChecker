@@ -25,7 +25,7 @@ class DebunkRepository @Inject constructor(
         val debunks = api.getDebunks()
         delay(500)
         db.withTransaction {
-            debunkDao.deleteAllDebunks()
+            debunkDao.deleteDefaultDebunks()
             debunkDao.insertDebunk(debunks)
         }
     }

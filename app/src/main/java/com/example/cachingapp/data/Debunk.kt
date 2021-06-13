@@ -13,5 +13,6 @@ data class Debunk(
     var category: String,
     var question: String,
     var answer: String,
-    var sources: String
+    var sources: String,
+    var state: String
 ) : Parcelable

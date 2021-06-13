@@ -41,9 +41,9 @@ class DebunkDetails : Fragment(R.layout.fragment_debunk_details) {
         val debunk=args.selectedDebunk
         image_view_logo_details.setImageResource(
             when (debunk.category) {
-                "covid" -> R.drawable.covid_category
+                "covid" -> R.drawable.ic_baseline_coronavirus_24
                 "vaccines" -> R.drawable.vaccine_category
-                else -> R.drawable.no_connection
+                else -> R.drawable.ic_baseline_text_snippet_24
             }
         )
         text_view_sources_details.text=debunk.sources

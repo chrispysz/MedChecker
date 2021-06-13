@@ -69,7 +69,8 @@ class FavouritesFragment : Fragment(R.layout.fragment_favourites), AdapterView.O
             val answer=binding.editTextAnswer.text.toString()
             val category=binding.spinnerCategory.selectedItem.toString()
             val sources = binding.editTextSources.text.toString()
-            val d=Debunk(0, category, question, answer, sources)
+            val state = "offline"
+            val d=Debunk(0, category, question, answer, sources, state)
             onSubmitClick(d)
 
         }

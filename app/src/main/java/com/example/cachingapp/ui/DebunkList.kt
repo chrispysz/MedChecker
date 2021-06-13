@@ -128,7 +128,7 @@ class DebunkList : Fragment(R.layout.fragment_debunk_list) {
             try {
                 repository.getApiDebunks()
                 withContext(Dispatchers.Main) {
-                    Toast.makeText(context, "Debunks have been successfully reset!", Toast.LENGTH_LONG)
+                    Toast.makeText(context, "Debunks have been successfully updated!", Toast.LENGTH_LONG)
                         .show()
                 }
             } catch (e: Exception) {

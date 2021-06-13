@@ -15,8 +15,8 @@ interface DebunkDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertDebunk(debunks: List<Debunk>)
 
-    @Query("DELETE FROM debunks")
-    suspend fun deleteAllDebunks()
+    @Query("DELETE FROM debunks WHERE state='online'")
+    suspend fun deleteDefaultDebunks()
 
     @Query("SELECT * FROM debunks WHERE category LIKE :searchQuery OR question LIKE :searchQuery OR answer like :searchQuery")
     fun searchDebunks(searchQuery: String): Flow<List<Debunk>>

@@ -33,9 +33,9 @@ class DebunkAdapter : ListAdapter<Debunk, DebunkAdapter.DebunkViewHolder>(Debunk
             binding.apply {
                 imageViewLogo.setImageResource(
                     when (debunk.category) {
-                        "covid" -> R.drawable.covid_category
+                        "covid" -> R.drawable.ic_baseline_coronavirus_24
                         "vaccines" -> R.drawable.vaccine_category
-                        else -> R.drawable.no_connection
+                        else -> R.drawable.ic_baseline_text_snippet_24
                     }
                 )
                 textViewQuestion.text = debunk.question
